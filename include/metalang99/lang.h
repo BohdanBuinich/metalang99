@@ -141,8 +141,30 @@
 
 /**
  * A value that is pasted as-is; no evaluation occurs on provided arguments.
+ *
+ * # Examples
+ *
+ * @code
+ * #include <metalang99/lang.h>
+ *
+ * #define F_IMPL(x) ML99_QUOTE(~x)
+ *
+ * #define PROG ML99_TERMS(ML99_QUOTE(1), ML99_QUOTE(2), ML99_call(F, ML99_QUOTE(7)))
+ *
+ * // The same as `PROG` pasted into a source file.
+ * ML99_EVAL(ML99_QUOTE(PROG))
+ * @endcode
  */
-#define v(...) (0v, __VA_ARGS__)
+#define ML99_QUOTE(...) (0v, __VA_ARGS__)
+
+#ifndef ML99_NO_SHORT_NAMES
+/**
+ * A short alias for #ML99_QUOTE.
+ *
+ * @note Can be disabled by defining ML99_NO_SHORT_NAMES.
+ */
+#define v(...) ML99_QUOTE(__VA_ARGS__)
+#endif
 
 // clang-format off
 /**
@@ -204,26 +226,6 @@
  * @endcode
  */
 #define ML99_TERMS(...) __VA_ARGS__
-
-/**
- * Delays evaluation for provided terms.
- *
- * `ML99_QUOTE(...)` is functionally equivalent to `v(...)`.
- *
- * # Examples
- *
- * @code
- * #include <metalang99/lang.h>
- *
- * #define F_IMPL(x) v(~x)
- *
- * #define PROG ML99_TERMS(v(1), v(2), ML99_call(F, v(7)))
- *
- * // The same as `PROG` pasted into a source file.
- * ML99_EVAL(ML99_QUOTE(PROG))
- * @endcode
- */
-#define ML99_QUOTE(...) v(__VA_ARGS__)
 
 #ifndef DOXYGEN_IGNORE
 
